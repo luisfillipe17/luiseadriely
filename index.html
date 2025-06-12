@@ -26,7 +26,6 @@
             position: relative;
         }
 
-        /* Estilo da foto com borda neon */
         .neon-border {
             position: relative;
             display: inline-block;
@@ -39,9 +38,9 @@
             width: 300px;
             height: 300px;
             transition: background-image 1s ease-in-out;
+            z-index: 3; /* CAMADA ACIMA DAS ESTRELAS */
         }
 
-        /* Efeito neon animado */
         @keyframes neon {
             0% {
                 box-shadow: 0 0 15px rgba(255, 0, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 0, 255, 0.8);
@@ -57,7 +56,7 @@
         p, .timer-container {
             z-index: 2;
             position: relative;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Sombra para destacar o texto */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
         }
 
         p {
@@ -69,11 +68,11 @@
 
         .timer-container {
             margin-top: 20px;
-            font-size: 1.3em; /* Reduzi o tamanho do contador */
+            font-size: 1.3em;
         }
 
         .timer-title {
-            font-size: 1.4em; /* Diminui o tamanho do título */
+            font-size: 1.4em;
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -185,12 +184,11 @@
             }
         }
 
-        /* Estilo das setas */
         .arrow {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 2.5rem; /* Aumenta o tamanho das setas */
+            font-size: 2.5rem;
             color: white;
             cursor: pointer;
             z-index: 2;
@@ -202,6 +200,63 @@
 
         .arrow-right {
             right: 5%;
+        }
+
+        /* NOVO CSS ADICIONADO */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                overflow-x: hidden;
+            }
+
+            .neon-border {
+                width: 250px;
+                height: 250px;
+                margin: 20px auto;
+            }
+
+            p {
+                font-size: 1.1em;
+                line-height: 1.5em;
+                max-width: 90%;
+            }
+
+            .timer-container {
+                font-size: 1em;
+                padding: 10px;
+                margin: 15px auto;
+            }
+
+            .arrow {
+                font-size: 2rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            .arrow-left {
+                left: 10px;
+            }
+
+            .arrow-right {
+                right: 10px;
+            }
+
+            .timer {
+                font-size: 0.9em;
+                word-break: keep-all;
+                white-space: normal;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .neon-border {
+                width: 220px;
+                height: 220px;
+            }
+
+            p {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
@@ -235,13 +290,13 @@
     <!-- Neon Border Image -->
     <div class="neon-border" id="image"></div>
 
-<p>
-    Cada Momento Ao Seu Lado Me Faz Desejar <br>
-    Que Esse Contador Nunca Termine, <br>
-    Que Nosso Amor Dure Por Toda A Eternidade. <br>
-    Eu Te Amo Profundamente ❤️ <br>
-    Feliz Dia Dos Namorados!
-</p>
+    <p>
+        Cada Momento Ao Seu Lado Me Faz Desejar <br>
+        Que Esse Contador Nunca Termine, <br>
+        Que Nosso Amor Dure Por Toda A Eternidade. <br>
+        Eu Te Amo Profundamente ❤️ <br>
+        Feliz Dia Dos Namorados!
+    </p>
 
     <!-- Timer Section -->
     <div class="timer-container">
@@ -253,49 +308,50 @@
     <div class="arrow arrow-left" onclick="changeImage('prev')">&lt;</div>
     <div class="arrow arrow-right" onclick="changeImage('next')">&gt;</div>
 
-<script>
-    let currentImageIndex = 0;
-    const images = [
-	'https://i.ibb.co/rf5NqPPb/IMG-20250308-205635.jpg',
-	'https://i.ibb.co/XZ9QKb54/IMG-20240831-174044.jpg',
-	'https://i.ibb.co/38S6GbP/IMG-20240713-235434.jpg',
-	'https://i.ibb.co/jZxnyRdP/IMG-20240705-213840.jpg',
-	'https://i.ibb.co/bjSKVHjx/IMG-20240629-222321.jpg',
-	'https://i.ibb.co/1tn4B5Pd/IMG-20240311-205629.jpg',
-	'https://i.ibb.co/hFS3Mfy0/IMG-20231111-151721.jpg'
-    ];
+    <script>
+        let currentImageIndex = 0;
+        const images = [
+            'https://i.ibb.co/rf5NqPPb/IMG-20250308-205635.jpg',
+            'https://i.ibb.co/XZ9QKb54/IMG-20240831-174044.jpg',
+            'https://i.ibb.co/38S6GbP/IMG-20240713-235434.jpg',
+            'https://i.ibb.co/jZxnyRdP/IMG-20240705-213840.jpg',
+            'https://i.ibb.co/bjSKVHjx/IMG-20240629-222321.jpg',
+            'https://i.ibb.co/1tn4B5Pd/IMG-20240311-205629.jpg',
+            'https://i.ibb.co/hFS3Mfy0/IMG-20231111-151721.jpg'
+        ];
 
-    document.getElementById('image').style.backgroundImage = `url(${images[0]})`;
+        document.getElementById('image').style.backgroundImage = `url(${images[0]})`;
 
-    function changeImage(direction) {
-        if (direction === 'next') {
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-        } else {
-            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        function changeImage(direction) {
+            if (direction === 'next') {
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+            } else {
+                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            }
+            document.getElementById('image').style.backgroundImage = `url(${images[currentImageIndex]})`;
         }
-        document.getElementById('image').style.backgroundImage = `url(${images[currentImageIndex]})`;
-    }
 
-    function updateTimer() {
-        const startDate = new Date('2019-03-11T00:00:00');
-        const now = new Date();
-        const diff = now - startDate;
+        function updateTimer() {
+            const startDate = new Date('2019-03-11T00:00:00');
+            const now = new Date();
+            const diff = now - startDate;
 
-        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24)) % 365;
-        const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
-        const minutes = Math.floor(diff / (1000 * 60)) % 60;
-        const seconds = Math.floor(diff / 1000) % 60;
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24)) % 365;
+            const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+            const minutes = Math.floor(diff / (1000 * 60)) % 60;
+            const seconds = Math.floor(diff / 1000) % 60;
 
-        document.getElementById('timer').innerText = 
-            `${years} Anos - ${days} Dias - ${hours} Horas - ${minutes} Minutos - ${seconds} Segundos`;
-    }
+            document.getElementById('timer').innerText = 
+                `${years} Anos - ${days} Dias - ${hours} Horas - ${minutes} Minutos - ${seconds} Segundos`;
+        }
 
-    setInterval(updateTimer, 1000);
-    updateTimer();
+        setInterval(updateTimer, 1000);
+        updateTimer();
 
-    // Auto change image every 10 seconds
-    setInterval(() => {
-        changeImage('next');
-    }, 10000);
-</script>
+        setInterval(() => {
+            changeImage('next');
+        }, 10000);
+    </script>
+</body>
+</html>
