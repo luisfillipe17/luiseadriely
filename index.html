@@ -352,6 +352,56 @@
         setInterval(() => {
             changeImage('next');
         }, 10000);
+
+        <audio id="bgMusic" loop>
+        <source src="vemca.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+
+    <button id="musicPlayer">▶</button>
+
+    <script>
+        // Configuração da música
+        const music = document.getElementById('bgMusic');
+        const musicButton = document.getElementById('musicPlayer');
+        let musicPlaying = false;
+
+        // Tenta reproduzir automaticamente (pode ser bloqueado pelo navegador)
+        function tryAutoplay() {
+            music.play()
+                .then(() => {
+                    musicPlaying = true;
+                    musicButton.textContent = '❚❚';
+                })
+                .catch(error => {
+                    console.log('Autoplay bloqueado:', error);
+                    // Mostra o botão para interação manual
+                    musicButton.style.display = 'flex';
+                });
+        }
+
+        // Tenta autoplay quando a página carrega
+        window.addEventListener('load', tryAutoplay);
+
+        // Botão de controle
+        musicButton.addEventListener('click', () => {
+            if (musicPlaying) {
+                music.pause();
+                musicButton.textContent = '▶';
+            } else {
+                music.play();
+                musicButton.textContent = '❚❚';
+            }
+            musicPlaying = !musicPlaying;
+        });
+
+        // Tenta autoplay após qualquer interação do usuário
+        document.addEventListener('click', function() {
+            if (!musicPlaying) {
+                tryAutoplay();
+            }
+        }, { once: true });
+        
     </script>
 </body>
 </html>
