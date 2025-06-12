@@ -7,6 +7,17 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+        /* Novas animações para o presente */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        @keyframes fade-out {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         body {
             display: flex;
             flex-direction: column;
@@ -261,111 +272,168 @@
     </style>
 </head>
 <body>
-    <!-- Stars -->
-    <div class="stars">
-        <div class="star small" style="top: 5%; left: 10%;"></div>
-        <div class="star medium" style="top: 8%; left: 30%;"></div>
-        <div class="star large" style="top: 12%; left: 60%;"></div>
-        <div class="star small" style="top: 15%; left: 80%;"></div>
-        <div class="star medium" style="top: 20%; left: 50%;"></div>
-        <div class="star large" style="top: 25%; left: 40%;"></div>
+    <!-- Tela do Presente (aparece primeiro) -->
+    <div id="presente-screen" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, #ffd6e7 0%, #ffb6c1 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: pointer;
+        transition: opacity 1s ease-out;
+    ">
+        <div id="presente" style="
+            font-size: 8rem;
+            animation: pulse 1.5s infinite alternate;
+            transform-origin: center;
+            color: #ff69b4;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.7);
+        ">🎁</div>
+        <p style="color: #fff; font-size: 1.5rem; margin-top: 20px; font-weight: 600;">Clique Para Abrir Seu Presente!</p>
     </div>
 
-    <!-- Falling Stars -->
-    <div class="falling-star" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
-    <div class="falling-star" style="top: 30%; left: 50%; animation-delay: 1.5s;"></div>
-    <div class="falling-star" style="top: 50%; left: 70%; animation-delay: 3s;"></div>
+    <!-- Conteúdo principal (inicialmente escondido) -->
+    <div id="main-content" style="display: none; animation: fadeIn 1.5s ease-in;">
+        <!-- Stars -->
+        <div class="stars">
+            <div class="star small" style="top: 5%; left: 10%;"></div>
+            <div class="star medium" style="top: 8%; left: 30%;"></div>
+            <div class="star large" style="top: 12%; left: 60%;"></div>
+            <div class="star small" style="top: 15%; left: 80%;"></div>
+            <div class="star medium" style="top: 20%; left: 50%;"></div>
+            <div class="star large" style="top: 25%; left: 40%;"></div>
+        </div>
 
-    <div class="hearts">
-        <div class="heart" style="top: 10%; left: 15%; font-size: 2rem;">💕</div>
-        <div class="heart blur" style="top: 20%; left: 35%; font-size: 3rem;">❤️</div>
-        <div class="heart" style="top: 30%; left: 60%; font-size: 1.5rem;">💖</div>
-        <div class="heart blur" style="top: 50%; left: 40%; font-size: 2.5rem;">💗</div>
-        <div class="heart" style="top: 70%; left: 20%; font-size: 1.8rem;">💝</div>
-        <div class="heart blur" style="top: 80%; left: 70%; font-size: 4rem;">💓</div>
-        <div class="heart blur" style="top: 90%; left: 50%; font-size: 3.5rem;">💞</div>
-        <div class="heart blur" style="top: 10%; left: 85%; font-size: 2rem;">❤‍🔥</div>
+        <!-- Falling Stars -->
+        <div class="falling-star" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+        <div class="falling-star" style="top: 30%; left: 50%; animation-delay: 1.5s;"></div>
+        <div class="falling-star" style="top: 50%; left: 70%; animation-delay: 3s;"></div>
+
+        <div class="hearts">
+            <div class="heart" style="top: 10%; left: 15%; font-size: 2rem;">💕</div>
+            <div class="heart blur" style="top: 20%; left: 35%; font-size: 3rem;">❤️</div>
+            <div class="heart" style="top: 30%; left: 60%; font-size: 1.5rem;">💖</div>
+            <div class="heart blur" style="top: 50%; left: 40%; font-size: 2.5rem;">💗</div>
+            <div class="heart" style="top: 70%; left: 20%; font-size: 1.8rem;">💝</div>
+            <div class="heart blur" style="top: 80%; left: 70%; font-size: 4rem;">💓</div>
+            <div class="heart blur" style="top: 90%; left: 50%; font-size: 3.5rem;">💞</div>
+            <div class="heart blur" style="top: 10%; left: 85%; font-size: 2rem;">❤‍🔥</div>
+        </div>
+
+        <!-- Neon Border Image -->
+        <div class="neon-border" id="image"></div>
+
+        <p>
+            Cada Momento Ao Seu Lado Me Faz Desejar <br>
+            Que Esse Contador Nunca Termine, <br>
+            Que Nosso Amor Dure Por Toda A Eternidade. <br>
+            Eu Te Amo Profundamente ❤️ <br>
+            Feliz Dia Dos Namorados!
+        </p>
+
+        <!-- Timer Section -->
+        <div class="timer-container">
+            <div class="timer-title">Contando Os Dias Ao Seu Lado</div>
+            <div id="timer" class="timer">Calculando...</div>
+        </div>
+
+        <!-- Arrows -->
+        <div class="arrow arrow-left" onclick="changeImage('prev')">&lt;</div>
+        <div class="arrow arrow-right" onclick="changeImage('next')">&gt;</div>
+
+        <audio id="musica" autoplay muted loop>
+            <source src="vemca.mp3" type="audio/mpeg">
+        </audio>
     </div>
-
-    <!-- Neon Border Image -->
-    <div class="neon-border" id="image"></div>
-
-    <p>
-        Cada Momento Ao Seu Lado Me Faz Desejar <br>
-        Que Esse Contador Nunca Termine, <br>
-        Que Nosso Amor Dure Por Toda A Eternidade. <br>
-        Eu Te Amo Profundamente ❤️ <br>
-        Feliz Dia Dos Namorados!
-    </p>
-
-    <!-- Timer Section -->
-    <div class="timer-container">
-        <div class="timer-title">Contando Os Dias Ao Seu Lado</div>
-        <div id="timer" class="timer">Calculando...</div>
-    </div>
-
-    <!-- Arrows -->
-    <div class="arrow arrow-left" onclick="changeImage('prev')">&lt;</div>
-    <div class="arrow arrow-right" onclick="changeImage('next')">&gt;</div>
 
     <script>
-        let currentImageIndex = 0;
-        const images = [
-            'https://i.ibb.co/rf5NqPPb/IMG-20250308-205635.jpg',
-            'https://i.ibb.co/XZ9QKb54/IMG-20240831-174044.jpg',
-            'https://i.ibb.co/38S6GbP/IMG-20240713-235434.jpg',
-            'https://i.ibb.co/jZxnyRdP/IMG-20240705-213840.jpg',
-            'https://i.ibb.co/bjSKVHjx/IMG-20240629-222321.jpg',
-            'https://i.ibb.co/1tn4B5Pd/IMG-20240311-205629.jpg',
-            'https://i.ibb.co/hFS3Mfy0/IMG-20231111-151721.jpg'
-        ];
-
-        document.getElementById('image').style.backgroundImage = `url(${images[0]})`;
-
-        function changeImage(direction) {
-            if (direction === 'next') {
-                currentImageIndex = (currentImageIndex + 1) % images.length;
-            } else {
-                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        // Adiciona a animação de fade-in
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeIn {
+                0% { opacity: 0; }
+                100% { opacity: 1; }
             }
-            document.getElementById('image').style.backgroundImage = `url(${images[currentImageIndex]})`;
-        }
+        `;
+        document.head.appendChild(style);
 
-        function updateTimer() {
-            const startDate = new Date('2019-03-11T00:00:00');
-            const now = new Date();
-            const diff = now - startDate;
+        // Espera o DOM carregar
+        document.addEventListener("DOMContentLoaded", function() {
+            const presenteScreen = document.getElementById("presente-screen");
+            const presente = document.getElementById("presente");
+            const mainContent = document.getElementById("main-content");
+            const audio = document.getElementById("musica");
 
-            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24)) % 365;
-            const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
-            const minutes = Math.floor(diff / (1000 * 60)) % 60;
-            const seconds = Math.floor(diff / 1000) % 60;
+            // Ao clicar no presente
+            presenteScreen.addEventListener("click", function() {
+                // Remove a animação de pulse
+                presente.style.animation = 'none';
+                
+                // Efeito de fade-out no fundo rosa
+                presenteScreen.style.animation = 'fade-out 1s forwards';
+                
+                // Mostra o conteúdo principal com fade-in
+                setTimeout(() => {
+                    presenteScreen.style.display = "none";
+                    mainContent.style.display = "block";
+                    
+                    // Inicia a música
+                    audio.muted = false;
+                    audio.play();
+                }, 1000);
+            });
 
-            document.getElementById('timer').innerText = 
-                `${years} Anos - ${days} Dias - ${hours} Horas - ${minutes} Minutos - ${seconds} Segundos`;
-        }
+            // Seu código original continua abaixo
+            let currentImageIndex = 0;
+            const images = [
+                'https://i.ibb.co/rf5NqPPb/IMG-20250308-205635.jpg',
+                'https://i.ibb.co/XZ9QKb54/IMG-20240831-174044.jpg',
+                'https://i.ibb.co/38S6GbP/IMG-20240713-235434.jpg',
+                'https://i.ibb.co/jZxnyRdP/IMG-20240705-213840.jpg',
+                'https://i.ibb.co/bjSKVHjx/IMG-20240629-222321.jpg',
+                'https://i.ibb.co/1tn4B5Pd/IMG-20240311-205629.jpg',
+                'https://i.ibb.co/hFS3Mfy0/IMG-20231111-151721.jpg'
+            ];
 
-        setInterval(updateTimer, 1000);
-        updateTimer();
+            document.getElementById('image').style.backgroundImage = `url(${images[0]})`;
 
-        setInterval(() => {
-            changeImage('next');
-        }, 10000);
+            function changeImage(direction) {
+                if (direction === 'next') {
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                } else {
+                    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                }
+                document.getElementById('image').style.backgroundImage = `url(${images[currentImageIndex]})`;
+            }
+
+            function updateTimer() {
+                const startDate = new Date('2019-03-11T00:00:00');
+                const now = new Date();
+                const diff = now - startDate;
+
+                const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24)) % 365;
+                const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+                const minutes = Math.floor(diff / (1000 * 60)) % 60;
+                const seconds = Math.floor(diff / 1000) % 60;
+
+                document.getElementById('timer').innerText = 
+                    `${years} Anos - ${days} Dias - ${hours} Horas - ${minutes} Minutos - ${seconds} Segundos`;
+            }
+
+            setInterval(updateTimer, 1000);
+            updateTimer();
+
+            setInterval(() => {
+                changeImage('next');
+            }, 10000);
+        });
     </script>
-    
-    <audio id="musica" autoplay muted loop>
-  <source src="vemca.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-  // Ativa o som no primeiro clique do usuário
-  window.addEventListener("click", function () {
-    const audio = document.getElementById("musica");
-    audio.muted = false;
-    audio.play();
-  }, { once: true });
-</script>
-
 </body>
 </html>
