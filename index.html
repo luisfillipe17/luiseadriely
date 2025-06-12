@@ -48,8 +48,13 @@
             background-position: center;
             width: 300px;
             height: 300px;
-            transition: background-image 1s ease-in-out;
+            transition: opacity 1s ease-in-out;
             z-index: 3; /* CAMADA ACIMA DAS ESTRELAS */
+            opacity: 1;
+        }
+
+        .neon-border.fade-out {
+            opacity: 0;
         }
 
         @keyframes neon {
@@ -363,12 +368,53 @@
         `;
         document.head.appendChild(style);
 
+        // Variáveis globais para as imagens
+        let currentImageIndex = 0;
+        let isChanging = false; // Para evitar mudanças durante a transição
+        const images = [
+            'https://i.ibb.co/rf5NqPPb/IMG-20250308-205635.jpg',
+            'https://i.ibb.co/38S6GbP/IMG-20240713-235434.jpg',
+            'https://i.ibb.co/jZxnyRdP/IMG-20240705-213840.jpg',
+            'https://i.ibb.co/bjSKVHjx/IMG-20240629-222321.jpg',
+            'https://i.ibb.co/1tn4B5Pd/IMG-20240311-205629.jpg',
+            'https://i.ibb.co/hFS3Mfy0/IMG-20231111-151721.jpg'
+        ];
+
+        // Função para mudar as imagens com fade
+        function changeImage(direction) {
+            if (isChanging) return;
+            isChanging = true;
+            
+            const imageElement = document.getElementById('image');
+            
+            // Adiciona classe para fade out
+            imageElement.classList.add('fade-out');
+            
+            setTimeout(() => {
+                // Muda a imagem
+                if (direction === 'next') {
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                } else {
+                    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                }
+                imageElement.style.backgroundImage = `url(${images[currentImageIndex]})`;
+                
+                // Remove a classe de fade out
+                imageElement.classList.remove('fade-out');
+                
+                isChanging = false;
+            }, 500); // Tempo igual ao da transição CSS
+        }
+
         // Espera o DOM carregar
         document.addEventListener("DOMContentLoaded", function() {
             const presenteScreen = document.getElementById("presente-screen");
             const presente = document.getElementById("presente");
             const mainContent = document.getElementById("main-content");
             const audio = document.getElementById("musica");
+
+            // Define a primeira imagem
+            document.getElementById('image').style.backgroundImage = `url(${images[0]})`;
 
             // Ao clicar no presente
             presenteScreen.addEventListener("click", function() {
@@ -389,28 +435,6 @@
                 }, 1000);
             });
 
-            // Seu código original continua abaixo
-            let currentImageIndex = 0;
-            const images = [
-                'https://i.ibb.co/rf5NqPPb/IMG-20250308-205635.jpg',
-                'https://i.ibb.co/38S6GbP/IMG-20240713-235434.jpg',
-                'https://i.ibb.co/jZxnyRdP/IMG-20240705-213840.jpg',
-                'https://i.ibb.co/bjSKVHjx/IMG-20240629-222321.jpg',
-                'https://i.ibb.co/1tn4B5Pd/IMG-20240311-205629.jpg',
-                'https://i.ibb.co/hFS3Mfy0/IMG-20231111-151721.jpg'
-            ];
-
-            document.getElementById('image').style.backgroundImage = `url(${images[0]})`;
-
-            function changeImage(direction) {
-                if (direction === 'next') {
-                    currentImageIndex = (currentImageIndex + 1) % images.length;
-                } else {
-                    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-                }
-                document.getElementById('image').style.backgroundImage = `url(${images[currentImageIndex]})`;
-            }
-
             function updateTimer() {
                 const startDate = new Date('2019-03-11T00:00:00');
                 const now = new Date();
@@ -429,6 +453,7 @@
             setInterval(updateTimer, 1000);
             updateTimer();
 
+            // Intervalo para mudança automática com fade
             setInterval(() => {
                 changeImage('next');
             }, 10000);
