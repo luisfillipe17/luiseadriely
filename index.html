@@ -28,8 +28,8 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(
                 to bottom,
-                #081526 55%, /* Azul mais escuro */
-                #4f94d4 100% /* Azul claro */
+                #081526 55%, /* Azul Escuro */
+                #4f94d4 100% /* Azul Claro */
             );
             color: #fff;
             text-align: center;
@@ -49,7 +49,7 @@
             width: 300px;
             height: 300px;
             transition: opacity 1s ease-in-out;
-            z-index: 3; /* CAMADA ACIMA DAS ESTRELAS */
+            z-index: 3; /* Camada > Estrelas */
             opacity: 1;
         }
 
@@ -218,7 +218,6 @@
             right: 5%;
         }
 
-        /* NOVO CSS ADICIONADO */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -277,7 +276,7 @@
     </style>
 </head>
 <body>
-    <!-- Tela do Presente (aparece primeiro) -->
+    <!-- Tela Do Presente -->
     <div id="presente-screen" style="
         position: fixed;
         top: 0;
@@ -303,9 +302,9 @@
         <p style="color: #fff; font-size: 1.5rem; margin-top: 20px; font-weight: 600;">Clique Para Abrir Seu Presente!</p>
     </div>
 
-    <!-- Conteúdo principal (inicialmente escondido) -->
+    <!-- (Principal Code) -->
     <div id="main-content" style="display: none; animation: fadeIn 1.5s ease-in;">
-        <!-- Stars -->
+        <!-- Estelas -->
         <div class="stars">
             <div class="star small" style="top: 5%; left: 10%;"></div>
             <div class="star medium" style="top: 8%; left: 30%;"></div>
@@ -315,7 +314,7 @@
             <div class="star large" style="top: 25%; left: 40%;"></div>
         </div>
 
-        <!-- Falling Stars -->
+        <!-- Estrela Cadente -->
         <div class="falling-star" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
         <div class="falling-star" style="top: 30%; left: 50%; animation-delay: 1.5s;"></div>
         <div class="falling-star" style="top: 50%; left: 70%; animation-delay: 3s;"></div>
@@ -331,7 +330,7 @@
             <div class="heart blur" style="top: 10%; left: 85%; font-size: 2rem;">❤‍🔥</div>
         </div>
 
-        <!-- Neon Border Image -->
+        <!-- Borda Neon -->
         <div class="neon-border" id="image"></div>
 
         <p>
@@ -342,13 +341,13 @@
             Feliz Dia Dos Namorados!
         </p>
 
-        <!-- Timer Section -->
+        <!-- Contador -->
         <div class="timer-container">
             <div class="timer-title">Contando Os Dias Ao Seu Lado</div>
             <div id="timer" class="timer">Calculando...</div>
         </div>
 
-        <!-- Arrows -->
+        <!-- Setas (Mudar Fotos) -->
         <div class="arrow arrow-left" onclick="changeImage('prev')">&lt;</div>
         <div class="arrow arrow-right" onclick="changeImage('next')">&gt;</div>
 
@@ -358,7 +357,7 @@
     </div>
 
     <script>
-        // Adiciona a animação de fade-in
+        // Animação "Fade" Nas Fotos
         const style = document.createElement('style');
         style.innerHTML = `
             @keyframes fadeIn {
@@ -368,9 +367,9 @@
         `;
         document.head.appendChild(style);
 
-        // Variáveis globais para as imagens
+        // Fotos
         let currentImageIndex = 0;
-        let isChanging = false; // Para evitar mudanças durante a transição
+        let isChanging = false; 
         const images = [
             'https://i.ibb.co/rf5NqPPb/IMG-20250308-205635.jpg',
             'https://i.ibb.co/38S6GbP/IMG-20240713-235434.jpg',
@@ -380,18 +379,18 @@
             'https://i.ibb.co/hFS3Mfy0/IMG-20231111-151721.jpg'
         ];
 
-        // Função para mudar as imagens com fade
+        // Mudar Fotos Com Fade
         function changeImage(direction) {
             if (isChanging) return;
             isChanging = true;
             
             const imageElement = document.getElementById('image');
             
-            // Adiciona classe para fade out
+            // Fade Out
             imageElement.classList.add('fade-out');
             
             setTimeout(() => {
-                // Muda a imagem
+                // Mudar Foto
                 if (direction === 'next') {
                     currentImageIndex = (currentImageIndex + 1) % images.length;
                 } else {
@@ -399,37 +398,37 @@
                 }
                 imageElement.style.backgroundImage = `url(${images[currentImageIndex]})`;
                 
-                // Remove a classe de fade out
+                // Remove Fade Out
                 imageElement.classList.remove('fade-out');
                 
                 isChanging = false;
-            }, 500); // Tempo igual ao da transição CSS
+            }, 500); // Tempo De Transição CSS
         }
 
-        // Espera o DOM carregar
+        // Espera o DOM Carregar
         document.addEventListener("DOMContentLoaded", function() {
             const presenteScreen = document.getElementById("presente-screen");
             const presente = document.getElementById("presente");
             const mainContent = document.getElementById("main-content");
             const audio = document.getElementById("musica");
 
-            // Define a primeira imagem
+            // Define A Primeira Foto
             document.getElementById('image').style.backgroundImage = `url(${images[0]})`;
 
-            // Ao clicar no presente
+            // Clicar No Presente
             presenteScreen.addEventListener("click", function() {
-                // Remove a animação de pulse
+                // Remove o Pulse
                 presente.style.animation = 'none';
                 
-                // Efeito de fade-out no fundo rosa
+                // Efeito Fade Out No Fundo Rosa
                 presenteScreen.style.animation = 'fade-out 1s forwards';
                 
-                // Mostra o conteúdo principal com fade-in
+                // Conteudo Principal Em Fade IN
                 setTimeout(() => {
                     presenteScreen.style.display = "none";
                     mainContent.style.display = "block";
                     
-                    // Inicia a música
+                    // Play Music
                     audio.muted = false;
                     audio.play();
                 }, 1000);
@@ -453,7 +452,7 @@
             setInterval(updateTimer, 1000);
             updateTimer();
 
-            // Intervalo para mudança automática com fade
+            // Transição De Fotos Automática 
             setInterval(() => {
                 changeImage('next');
             }, 10000);
